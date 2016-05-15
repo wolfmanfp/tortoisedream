@@ -1,14 +1,15 @@
-canvas{
-	position: absolute;
+canvas {
+    position: absolute;
     top: 0;
     left: 0;
 }
-#canvas {
-	
+
+#tortoise {
     border: 1px solid black;
-	z-index: 0;
+    z-index: 0;
 }
 
-#canvas2{
-	z-index:-1;
-	border: 1px solid red;
+#drawing {
+    z-index: -1;
+    border: 1px solid red;
+}
