@@ -4,6 +4,7 @@ canvas {
     left: 0;
 }
 
+
 #tortoise {
     border: 1px solid black;
     z-index: 0;
@@ -12,4 +13,15 @@ canvas {
 #drawing {
     z-index: -1;
     border: 1px solid red;
+}
+
+#canvas{
+	float: left;
+	position: relative;
+	height: 600px;
+	width: 800px;
+}
+
+#input{
+	float: left;
 }
