@@ -5,9 +5,9 @@ var ctx2;
 var cmdHistory=[];
 var cmdIndex = 0; 
 
-function Tortoise(x, y) {
-	this.x = x;
-	this.y = y;
+function Tortoise(X, Y) {
+	var x = X;
+	var y = Y;
 
 	var degree = 0;
 	var degreeStep = 5;
@@ -83,6 +83,7 @@ function Tortoise(x, y) {
 
 function init(x, y) {
 	tortoise = new Tortoise(x, y);
+
 	setInterval(repaint, 16);
 }
 
@@ -113,8 +114,6 @@ function evalInput(e) {
 			{cmdIndex--;}
 		
 		$txt.val(cmdHistory[cmdIndex]);		
-		console.log(cmdHistory);
-		console.log(cmdIndex);
 	}
 	
 	
@@ -123,8 +122,15 @@ function evalInput(e) {
 		if(cmdIndex <cmdHistory.length-1) 		
 			{cmdIndex++;}
 		$txt.val(cmdHistory[cmdIndex]);
-		console.log(cmdHistory);
-		console.log(cmdIndex);
+	}
+	
+	else if(e.which == 9){
+		var f = $txt.val().split('.')[1];
+		for (var property in tortoise) {
+   		if (tortoise.hasOwnProperty(property) && property.startsWith(f)) {
+		$txt.val('tortoise.'+ property);
+   }
+}
 	}
 	
 	
