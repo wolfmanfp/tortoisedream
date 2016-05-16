@@ -5,6 +5,7 @@ var ctx2;
 var cmdHistory = [];
 var cmdIndex = 0;
 var cmdFragment = '';
+var cmdMatches = [];
 var cmdArray = ['go', 'turn', 'trip', 'tailDown', 'tailUp', 'dream'];
 
 function Tortoise(x1, y1) {
@@ -24,11 +25,13 @@ function Tortoise(x1, y1) {
     var isDrawing = false;
 
     this.go = function (dist) {
-        distance = dist;
+        if (!isNaN(dist))
+            distance = dist;
     };
 
     this.turn = function (deg) {
-        degree = deg;
+        if (!isNaN(deg))
+            degree = deg;
     };
 
     this.tailUp = function () {
@@ -100,9 +103,9 @@ function cmdArchive(cmd) {
 }
 
 function cmdEntered(cmd, $txt) {
-    eval(cmd);
-    cmdArchive(cmd);
-    $txt.val('');
+        eval('tortoise.' + cmd);
+        cmdArchive(cmd);
+        $txt.val('');
 }
 
 function cmdPrevious(cmd, $txt) {
@@ -121,53 +124,69 @@ function cmdNext(cmd, $txt) {
 }
 
 function cmdAutoComplete(cmd, $txt) {
-    var txt = $txt.val();
-    var tort = 'tortoise';
-    if (tort.startsWith(txt)) {
-            $txt.val(tort);
-        } 
-    else {
-            var func = txt.split('.')[1];
-            $.each(cmdArray, function(index, value) {
-                if (value.startsWith(func)) {
-                    $txt.val('tortoise.' + value);
-                }
-            }); 
-        }
-    }
-
-    function evalInput(e) {
-        $txt = $('#txtinput');
-        cmd = $txt.val().split('\n')[0]; //parancs elso sora
-
-        switch (e.which) {
-        case 13:
-            e.preventDefault();
-            cmdEntered(cmd, $txt);
-            break;
-        case 38:
-            cmdPrevious(cmd, $txt);
-            break;
-        case 40:
-            cmdNext(cmd, $txt);
-            break;
-
-        case 9:
-            e.preventDefault();
-            cmdAutoComplete(cmd, $txt);
-            break;
-        default:
-            break;
-        }
-    };
-
-    window.onload = function () {
-        $("#txtinput").keydown(function (e) {
-            evalInput(e);
+    
+    if (!cmd.startsWith(cmdFragment))
+        cmdMatches = [];
+    
+    switch (cmdMatches.length) {
+        //Ne bántsd a sorrendet
+    case 0:
+        cmdFragment = cmd;
+        $.each(cmdArray, function (index, value) {
+            if (value.startsWith(cmd)) {
+                cmdMatches.push(value);
+            }
         });
+        $txt.val(cmdMatches.shift());
 
-        canvas = document.getElementById("tortoise");
-        ctx = canvas.getContext("2d");
-        ctx2 = document.getElementById("drawing").getContext("2d");
-        init(canvas.width / 2, canvas.height / 2);
-    };
+        break;
+
+    default:
+
+        
+        $txt.val(cmdMatches.shift());
+        break;
+
+    }
+    console.log(cmdMatches);
+    console.log(cmdFragment);
+}
+
+
+
+
+function evalInput(e) {
+    $txt = $('#txtinput');
+    cmd = $txt.val().split('\n')[0]; //parancs elso sora
+
+    switch (e.which) {
+    case 13:
+        e.preventDefault();
+        cmdEntered(cmd, $txt);
+        break;
+    case 38:
+        cmdPrevious(cmd, $txt);
+        break;
+    case 40:
+        cmdNext(cmd, $txt);
+        break;
+
+    case 9:
+        e.preventDefault();
+        cmdAutoComplete(cmd, $txt);
+        break;
+    default:
+        break;
+    }
+};
+
+window.onload = function () {
+    $("#txtinput").keydown(function (e) {
+        evalInput(e);
+    });
+
+    canvas = document.getElementById("tortoise");
+    ctx = canvas.getContext("2d");
+    ctx2 = document.getElementById("drawing").getContext("2d");
+    init(canvas.width / 2, canvas.height / 2);
+};
