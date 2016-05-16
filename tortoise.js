@@ -120,14 +120,14 @@ function cmdNext($txt) {
 }
 
 function cmdAutoComplete(cmd, $txt) {
-    console.log(cmd + " = "+ cmdFragment);
+    //console.log(cmd + " = "+ cmdFragment);
     if (!cmd.startsWith(cmdFragment)){
-        cmdFragment = cmd;
         cmdMatches = [];
     }
         
     switch (cmdMatches.length) {
     case 0:
+        cmdFragment = cmd;
         $.each(cmdArray, function (index, value) {
             if (value.startsWith(cmd)) {
                 cmdMatches.push(value);
@@ -140,6 +140,8 @@ function cmdAutoComplete(cmd, $txt) {
         $txt.setCursorPosition(fullCmd.length-1);
         break;
     }
+    
+    console.log(cmdMatches);
 }
 
 function evalInput(e) {
@@ -172,6 +174,7 @@ function evalInput(e) {
             break;
     }
 }
+
 
 $.fn.setCursorPosition = function(pos) {
     this.each(function(index, elem) {
