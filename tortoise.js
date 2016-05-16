@@ -6,7 +6,7 @@ var cmdHistory = [];
 var cmdIndex = 0;
 var cmdFragment = '';
 var cmdMatches = [];
-var cmdArray = ['go', 'turn', 'trip', 'tailDown', 'tailUp', 'dream'];
+var cmdArray = ['go()', 'turn()', 'trip()', 'tailDown()', 'tailUp()', 'dream()'];
 
 function Tortoise(x1, y1) {
     var x = x1;
@@ -103,9 +103,9 @@ function cmdArchive(cmd) {
 }
 
 function cmdEntered(cmd, $txt) {
-        eval('tortoise.' + cmd);
-        cmdArchive(cmd);
-        $txt.val('');
+    eval('tortoise.' + cmd);
+    cmdArchive(cmd);
+    $txt.val('');
 }
 
 function cmdPrevious(cmd, $txt) {
@@ -124,32 +124,31 @@ function cmdNext(cmd, $txt) {
 }
 
 function cmdAutoComplete(cmd, $txt) {
-    
-    if (!cmd.startsWith(cmdFragment))
-        cmdMatches = [];
-    
-    switch (cmdMatches.length) {
-        //Ne bántsd a sorrendet
-    case 0:
+
+    console.log(cmd + " = "+ cmdFragment);
+    if (!cmd.startsWith(cmdFragment)){
         cmdFragment = cmd;
+        cmdMatches = [];
+    }
+        
+    switch (cmdMatches.length) {
+    case 0:
         $.each(cmdArray, function (index, value) {
             if (value.startsWith(cmd)) {
                 cmdMatches.push(value);
             }
         });
-        $txt.val(cmdMatches.shift());
-
-        break;
+    
 
     default:
-
-        
-        $txt.val(cmdMatches.shift());
+        var asd = cmdMatches.shift();
+        $txt.val(asd);
+        $txt.setCursorPosition(asd.length-1);
         break;
 
     }
-    console.log(cmdMatches);
-    console.log(cmdFragment);
+    //console.log(cmdMatches);
+    //console.log(cmdFragment);
 }
 
 
@@ -160,24 +159,46 @@ function evalInput(e) {
     cmd = $txt.val().split('\n')[0]; //parancs elso sora
 
     switch (e.which) {
+            
+    //enter
     case 13:
         e.preventDefault();
         cmdEntered(cmd, $txt);
         break;
+            
+    //arrow up 
     case 38:
         cmdPrevious(cmd, $txt);
         break;
+            
+    //arrow down
     case 40:
         cmdNext(cmd, $txt);
         break;
-
+            
+    //tab
     case 9:
         e.preventDefault();
+        if(cmd != '' ){
         cmdAutoComplete(cmd, $txt);
-        break;
-    default:
+        }
         break;
     }
+};
+
+$.fn.setCursorPosition = function(pos) {
+  this.each(function(index, elem) {
+    if (elem.setSelectionRange) {
+      elem.setSelectionRange(pos, pos);
+    } else if (elem.createTextRange) {
+      var range = elem.createTextRange();
+      range.collapse(true);
+      range.moveEnd('character', pos);
+      range.moveStart('character', pos);
+      range.select();
+    }
+  });
+  return this;
 };
 
 window.onload = function () {
