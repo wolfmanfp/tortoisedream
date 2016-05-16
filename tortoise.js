@@ -2,11 +2,12 @@ var tortoise;
 var canvas;
 var ctx;
 var ctx2;
+
 var cmdHistory = [];
 var cmdIndex = 0;
 var cmdFragment = '';
 var cmdMatches = [];
-var cmdArray = ['go()', 'turn()', 'trip()', 'tailDown()', 'tailUp()', 'dream()'];
+var cmdArray = ['go()', 'turn()', 'tailDown()', 'tailUp()', 'dream()', 'look()', 'trip()'];
 
 function Tortoise(x1, y1) {
     var x = x1;
@@ -23,33 +24,30 @@ function Tortoise(x1, y1) {
     var height = img.height;
 
     var isDrawing = false;
+    var isTripping = false;
+
+    var color = "#000000";
+    var hue = 0;
 
     this.go = function(dist) {
-        if (!isNaN(dist)) {
-            distance = dist;
-        }
+        if (!isNaN(dist)) distance = dist;
     };
 
     this.turn = function(deg) {
-        if (!isNaN(deg)) {
-            degree = deg;
-        }
+        if (!isNaN(deg)) degree = deg;
     };
 
     this.tailUp = function() {
-        if (isDrawing) {
-            isDrawing = false;
-        }
+        if (isDrawing) isDrawing = false;
     };
 
     this.tailDown = function() {
-        if (!isDrawing) {
-            isDrawing = true;
-        }
+        if (!isDrawing) isDrawing = true;
     };
 
     this.dream = function(rgb) {
-        ctx2.fillStyle= "#"+rgb;
+        if (isTripping) isTripping = false;
+        color = "#" + rgb;
     };
 
     this.look = function() {
@@ -59,7 +57,7 @@ function Tortoise(x1, y1) {
     };
 
     this.trip = function() {
-        //TODO
+        isTripping = true;
     };
 
     this.draw = function() {
@@ -71,6 +69,12 @@ function Tortoise(x1, y1) {
         ctx.rotate(-rad);
         ctx.drawImage(img, -(width / 2), -(height / 2));
         ctx.restore();
+        if (isTripping) {
+            if (distance!=0) hue++;
+            ctx2.fillStyle = 'hsl(' + hue + ', 100%, 50%)';
+        } else {
+            ctx2.fillStyle = color;
+        }
         if (isDrawing) ctx2.fillRect(x, y, 1, 1);
     };
 
@@ -196,7 +200,7 @@ function repaint() {
 }
 
 window.onload = function() {
-    $("#txtinput").keyup(function (e) {
+    $("#txtinput").keydown(function(e) {
         evalInput(e);
     });
 
