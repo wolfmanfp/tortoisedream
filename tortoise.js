@@ -24,41 +24,45 @@ function Tortoise(x1, y1) {
 
     var isDrawing = false;
 
-    this.go = function (dist) {
-        if (!isNaN(dist))
+    this.go = function(dist) {
+        if (!isNaN(dist)) {
             distance = dist;
+        }
     };
 
-    this.turn = function (deg) {
-        if (!isNaN(deg))
+    this.turn = function(deg) {
+        if (!isNaN(deg)) {
             degree = deg;
+        }
     };
 
-    this.tailUp = function () {
+    this.tailUp = function() {
         if (isDrawing) {
             isDrawing = false;
         }
     };
 
-    this.tailDown = function () {
+    this.tailDown = function() {
         if (!isDrawing) {
             isDrawing = true;
         }
     };
 
-    this.dream = function () {
+    this.dream = function(rgb) {
+        ctx2.fillStyle= "#"+rgb;
+    };
+
+    this.look = function() {
+        var data = ctx2.getImageData(x, y, 1, 1).data;
+        $("#look").css("background-color",
+            "rgb("+data[0]+","+data[1]+","+data[2]+")");
+    };
+
+    this.trip = function() {
         //TODO
     };
 
-    this.look = function () {
-        //TODO
-    };
-
-    this.trip = function () {
-        //TODO
-    };
-
-    this.draw = function () {
+    this.draw = function() {
         move();
         rotate();
 
@@ -86,17 +90,6 @@ function Tortoise(x1, y1) {
     }
 }
 
-function init(x, y) {
-    tortoise = new Tortoise(x, y);
-
-    setInterval(repaint, 16);
-}
-
-function repaint() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    tortoise.draw();
-}
-
 function cmdArchive(cmd) {
     cmdHistory.push(cmd);
     cmdIndex = cmdHistory.length;
@@ -108,15 +101,14 @@ function cmdEntered(cmd, $txt) {
     $txt.val('');
 }
 
-function cmdPrevious(cmd, $txt) {
+function cmdPrevious($txt) {
     if (cmdIndex > 0) {
         cmdIndex--;
     }
-
     $txt.val(cmdHistory[cmdIndex]);
 }
 
-function cmdNext(cmd, $txt) {
+function cmdNext($txt) {
     if (cmdIndex < cmdHistory.length - 1) {
         cmdIndex++;
     }
@@ -124,7 +116,6 @@ function cmdNext(cmd, $txt) {
 }
 
 function cmdAutoComplete(cmd, $txt) {
-
     console.log(cmd + " = "+ cmdFragment);
     if (!cmd.startsWith(cmdFragment)){
         cmdFragment = cmd;
@@ -138,71 +129,74 @@ function cmdAutoComplete(cmd, $txt) {
                 cmdMatches.push(value);
             }
         });
-    
 
     default:
-        var asd = cmdMatches.shift();
-        $txt.val(asd);
-        $txt.setCursorPosition(asd.length-1);
+        var fullCmd = cmdMatches.shift();
+        $txt.val(fullCmd);
+        $txt.setCursorPosition(fullCmd.length-1);
         break;
-
     }
-    //console.log(cmdMatches);
-    //console.log(cmdFragment);
 }
-
-
-
 
 function evalInput(e) {
     $txt = $('#txtinput');
-    cmd = $txt.val().split('\n')[0]; //parancs elso sora
+    cmd = $txt.val();
 
     switch (e.which) {
-            
-    //enter
-    case 13:
-        e.preventDefault();
-        cmdEntered(cmd, $txt);
-        break;
-            
-    //arrow up 
-    case 38:
-        cmdPrevious(cmd, $txt);
-        break;
-            
-    //arrow down
-    case 40:
-        cmdNext(cmd, $txt);
-        break;
-            
-    //tab
-    case 9:
-        e.preventDefault();
-        if(cmd != '' ){
-        cmdAutoComplete(cmd, $txt);
-        }
-        break;
+        //enter
+        case 13:
+            e.preventDefault();
+            cmdEntered(cmd, $txt);
+            break;
+
+        //arrow up
+        case 38:
+            cmdPrevious($txt);
+            break;
+
+        //arrow down
+        case 40:
+            cmdNext($txt);
+            break;
+
+        //tab
+        case 9:
+            e.preventDefault();
+            if(cmd != '' ) {
+                cmdAutoComplete(cmd, $txt);
+            }
+            break;
     }
-};
+}
 
 $.fn.setCursorPosition = function(pos) {
-  this.each(function(index, elem) {
-    if (elem.setSelectionRange) {
-      elem.setSelectionRange(pos, pos);
-    } else if (elem.createTextRange) {
-      var range = elem.createTextRange();
-      range.collapse(true);
-      range.moveEnd('character', pos);
-      range.moveStart('character', pos);
-      range.select();
-    }
-  });
-  return this;
+    this.each(function(index, elem) {
+        if (elem.setSelectionRange) {
+            elem.setSelectionRange(pos, pos);
+        }
+        else if (elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', pos);
+            range.moveStart('character', pos);
+            range.select();
+        }
+    });
+    return this;
 };
 
-window.onload = function () {
-    $("#txtinput").keydown(function (e) {
+function init(x, y) {
+    tortoise = new Tortoise(x, y);
+    setInterval(repaint, 16);
+}
+
+function repaint() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    tortoise.draw();
+}
+
+window.onload = function() {
+    $("#txtinput").keyup(function (e) {
         evalInput(e);
     });
 
