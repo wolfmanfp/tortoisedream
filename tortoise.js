@@ -202,6 +202,15 @@ function repaint() {
     tortoise.draw();
 }
 
+function helpWindow() {
+    $('#help').click(function(){
+        $('#helpwin').show();
+    });
+    $(".close").click(function() {
+        $('#helpwin').hide();
+    });
+}
+
 window.onload = function() {
     $("#txtinput").keydown(function(e) {
         evalInput(e);
@@ -211,4 +220,5 @@ window.onload = function() {
     ctx = canvas.getContext("2d");
     ctx2 = document.getElementById("drawing").getContext("2d");
     init(canvas.width / 2, canvas.height / 2);
+    helpWindow();
 };

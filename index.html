@@ -10,14 +10,29 @@
 </head>
 
 <body>
-    <div id="canvas">
-        <canvas id="tortoise" width="800" height="600"></canvas>
-        <canvas id="drawing" width="800" height="600"></canvas>
-    </div>
-    <div id="input">
+    <h1>Tortoise Dream</h1>
+    <div class="container">
+        <div id="tdream">
+            <canvas id="tortoise" width="640" height="400"></canvas>
+            <canvas id="drawing" width="640" height="400"></canvas>
+        </div>
         <input type="text" title="txtinput" id="txtinput">
+        <div id="help">Súgó</div>
+        <div id="look"></div>
     </div>
-    <div id="look"></div>
+    <div id="helpwin">
+        Az alábbi parancsokat használhatod a teknős irányítására:<br>
+        - go([távolság])<br>
+        - turn([fok])<br>
+        - tailDown(): így rajzol a teknős<br>
+        - tailUp(): a teknős abbahagyja a rajzolást<br>
+        - dream([RGB]): a teknős a megadott színnel rajzol<br>
+        - look(): a teknős megnézi, hogy milyen szín van alatta<br>
+        - trip(): a teknős megeszi a varázsgombát
+        <p><a href="#" class="close">Bezárás</a></p>
+    </div>
+
+
 </body>
 
 </html>
