@@ -1,10 +1,15 @@
 @import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
 
+:root {
+    --background: #ffffee;
+    --foreground: #000020;
+}
+
 * {
     margin: 0;
     padding: 0;
     border: 0;
-    font-family: 'Share Tech Mono', sans-serif;
+    font-family: 'Share Tech Mono', monospace;
 }
 
 h1 {
@@ -31,7 +36,7 @@ h1 {
 }
 
 #tortoise {
-    border: 1px solid black;
+    border: 1px solid var(--foreground);
     z-index: 0;
 }
 
@@ -39,28 +44,28 @@ h1 {
     z-index: -1;
 }
 
-#txtinput{
-    border: 1px solid black;
+#txtinput {
+    border: 1px solid var(--foreground);
     width: 600px;
 }
 
 #help {
     float: right;
-    background-color: #000020;
-    color: #ffffee;
+    background-color: var(--foreground);
+    color: var(--background);
     text-decoration: none;
 }
 
 #help:hover {
     cursor: pointer;
-    background-color: #ffffee;
-    color: #000020;
+    background-color: var(--background);
+    color: var(--foreground);
 }
 
 .close:hover {
     cursor: pointer;
-    background-color: #000020;
-    color: #ffffee;
+    background-color: var(--foreground);
+    color: var(--background);
 }
 
 #helpwin {
@@ -70,11 +75,11 @@ h1 {
     left: 0;
     right: 0;
     width: 640px;
-    border: 1px solid #ffffee;
+    border: 1px solid var(--background);
     margin: 0 auto;
     padding: 10px;
-    background-color: #000020;
-    color: #ffffee;
+    background-color: var(--foreground);
+    color: var(--background);
 }
 
 #helpwin p {
@@ -83,14 +88,14 @@ h1 {
 }
 
 .close {
-    background-color: #ffffee;
-    color: #000020;
+    background-color: var(--background);
+    color: var(--foreground);
     text-decoration: none;
 }
 
 #look {
     margin-top: 10px;
-    border: 1px solid black;
+    border: 1px solid var(--foreground);
     width: 20px;
     height: 20px;
 }

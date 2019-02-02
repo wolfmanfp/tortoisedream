@@ -19,9 +19,15 @@ function Tortoise(x1, y1) {
     var distance = 0;
 
     var img = new Image();
+    var width = 0;
+    var height = 0;
+    var isImageLoaded = false;
     img.src = "tortoise.png";
-    var width = img.width;
-    var height = img.height;
+    img.addEventListener("load", () =>  {
+        isImageLoaded = true;
+        width = img.width;
+        height = img.height;
+    });
 
     var isDrawing = false;
     var isTripping = false;
@@ -30,30 +36,39 @@ function Tortoise(x1, y1) {
     var hue = 0;
 
     this.go = function(dist) {
-        if (!isNaN(dist)) distance = dist;
+        if (!isNaN(dist)) {
+            distance = dist;
+        }
     };
 
     this.turn = function(deg) {
-        if (!isNaN(deg)) degree = deg;
+        if (!isNaN(deg)) {
+            degree = deg;
+        }
     };
 
     this.tailUp = function() {
-        if (isDrawing) isDrawing = false;
+        if (isDrawing) { 
+            isDrawing = false;
+        }
     };
 
     this.tailDown = function() {
-        if (!isDrawing) isDrawing = true;
+        if (!isDrawing) { 
+            isDrawing = true; 
+        }
     };
 
     this.dream = function(rgb) {
-        if (isTripping) isTripping = false;
-        color = "#" + rgb;
+        if (isTripping) { 
+            isTripping = false;
+        }
+        color = `#${rgb}`;
     };
 
     this.look = function() {
         var data = ctx2.getImageData(x, y, 1, 1).data;
-        $("#look").css("background-color",
-            "rgb("+data[0]+","+data[1]+","+data[2]+")");
+        $("#look").css("background-color", `rgb(${data[0]}, ${data[1]}, ${data[2]})`);
     };
 
     this.trip = function() {
@@ -67,15 +82,21 @@ function Tortoise(x1, y1) {
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(-rad);
-        ctx.drawImage(img, -(width / 2), -(height / 2));
+        if (isImageLoaded) {
+            ctx.drawImage(img, -(width / 2), -(height / 2));
+        }
         ctx.restore();
         if (isTripping) {
-            if (distance!=0) hue++;
-            ctx2.fillStyle = 'hsl(' + hue + ', 100%, 50%)';
+            if (distance != 0) {
+                hue++;
+            }
+            ctx2.fillStyle = `hsl(${hue}, 100%, 50%)`;
         } else {
             ctx2.fillStyle = color;
         }
-        if (isDrawing) ctx2.fillRect(x, y, 1, 1);
+        if (isDrawing) { 
+            ctx2.fillRect(x, y, 1, 1); 
+        }
     };
 
     function move() {
@@ -100,7 +121,7 @@ function cmdArchive(cmd) {
 }
 
 function cmdEntered(cmd, $txt) {
-    eval('tortoise.' + cmd);
+    eval(`tortoise.${cmd}`);
     cmdArchive(cmd);
     $txt.val('');
 }
@@ -120,28 +141,25 @@ function cmdNext($txt) {
 }
 
 function cmdAutoComplete(cmd, $txt) {
-    //console.log(cmd + " = "+ cmdFragment);
     if (!cmd.startsWith(cmdFragment)){
         cmdMatches = [];
     }
         
     switch (cmdMatches.length) {
-    case 0:
-        cmdFragment = cmd;
-        $.each(cmdArray, function (index, value) {
-            if (value.startsWith(cmd)) {
-                cmdMatches.push(value);
-            }
-        });
+        case 0:
+            cmdFragment = cmd;
+            $.each(cmdArray, function (index, value) {
+                if (value.startsWith(cmd)) {
+                    cmdMatches.push(value);
+                }
+            });
 
-    default:
-        var fullCmd = cmdMatches.shift();
-        $txt.val(fullCmd);
-        $txt.setCursorPosition(fullCmd.length-1);
-        break;
+        default:
+            var fullCmd = cmdMatches.shift();
+            $txt.val(fullCmd);
+            $txt.setCursorPosition(fullCmd.length - 1);
+            break;
     }
-    
-    console.log(cmdMatches);
 }
 
 function evalInput(e) {
@@ -180,8 +198,7 @@ $.fn.setCursorPosition = function(pos) {
     this.each(function(index, elem) {
         if (elem.setSelectionRange) {
             elem.setSelectionRange(pos, pos);
-        }
-        else if (elem.createTextRange) {
+        } else if (elem.createTextRange) {
             var range = elem.createTextRange();
             range.collapse(true);
             range.moveEnd('character', pos);
