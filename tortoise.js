@@ -1,7 +1,7 @@
 var tortoise;
 var canvas;
 var ctx;
-var ctx2;
+var ctxDrawing;
 
 var cmdHistory = [];
 var cmdIndex = 0;
@@ -14,7 +14,6 @@ function Tortoise(x1, y1) {
     var y = y1;
 
     var degree = 0;
-    var degreeStep = 5;
     var rad = 0;
     var distance = 0;
 
@@ -67,7 +66,7 @@ function Tortoise(x1, y1) {
     };
 
     this.look = function() {
-        var data = ctx2.getImageData(x, y, 1, 1).data;
+        var data = ctxDrawing.getImageData(x, y, 1, 1).data;
         $("#look").css("background-color", `rgb(${data[0]}, ${data[1]}, ${data[2]})`);
     };
 
@@ -90,12 +89,12 @@ function Tortoise(x1, y1) {
             if (distance != 0) {
                 hue++;
             }
-            ctx2.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            ctxDrawing.fillStyle = `hsl(${hue}, 100%, 50%)`;
         } else {
-            ctx2.fillStyle = color;
+            ctxDrawing.fillStyle = color;
         }
         if (isDrawing) { 
-            ctx2.fillRect(x, y, 1, 1); 
+            ctxDrawing.fillRect(x, y, 1, 1); 
         }
     };
 
@@ -108,10 +107,10 @@ function Tortoise(x1, y1) {
     }
 
     function rotate() {
-        if (degree != 0) {
-            rad -= degreeStep * (Math.PI / 180);
-            degree -= degreeStep;
-        }
+        let degreeStep = degree > 0 ? 1 : -1;
+
+        rad -= degreeStep * (Math.PI / 180);
+        degree -= degreeStep;
     }
 }
 
@@ -186,7 +185,7 @@ function evalInput(e) {
         //tab
         case 9:
             e.preventDefault();
-            if(cmd != '' ) {
+            if(cmd != '') {
                 cmdAutoComplete(cmd, $txt);
             }
             break;
@@ -235,7 +234,7 @@ window.onload = function() {
 
     canvas = document.getElementById("tortoise");
     ctx = canvas.getContext("2d");
-    ctx2 = document.getElementById("drawing").getContext("2d");
+    ctxDrawing = document.getElementById("drawing").getContext("2d");
     init(canvas.width / 2, canvas.height / 2);
     helpWindow();
 };
