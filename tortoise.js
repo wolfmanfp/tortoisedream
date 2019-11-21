@@ -9,108 +9,108 @@ var cmdFragment = '';
 var cmdMatches = [];
 var cmdArray = ['go()', 'turn()', 'tailDown()', 'tailUp()', 'dream()', 'look()', 'trip()'];
 
-function Tortoise(x1, y1) {
-    var x = x1;
-    var y = y1;
+class Tortoise {
+    constructor(x1, y1) {
+        var x = x1;
+        var y = y1;
 
-    var degree = 0;
-    var rad = 0;
-    var distance = 0;
+        var degree = 0;
+        var rad = 0;
+        var distance = 0;
 
-    var img = new Image();
-    var width = 0;
-    var height = 0;
-    var isImageLoaded = false;
-    img.src = "tortoise.png";
-    img.addEventListener("load", () =>  {
-        isImageLoaded = true;
-        width = img.width;
-        height = img.height;
-    });
+        var img = new Image();
+        var width = 0;
+        var height = 0;
+        var isImageLoaded = false;
+        img.src = "tortoise.png";
+        img.addEventListener("load", () => {
+            isImageLoaded = true;
+            width = img.width;
+            height = img.height;
+        });
 
-    var isDrawing = false;
-    var isTripping = false;
+        var isDrawing = false;
+        var isTripping = false;
+        var color = "#000000";
+        var hue = 0;
 
-    var color = "#000000";
-    var hue = 0;
-
-    this.go = function(dist) {
-        if (!isNaN(dist)) {
-            distance = dist;
-        }
-    };
-
-    this.turn = function(deg) {
-        if (!isNaN(deg)) {
-            degree = deg;
-        }
-    };
-
-    this.tailUp = function() {
-        if (isDrawing) { 
-            isDrawing = false;
-        }
-    };
-
-    this.tailDown = function() {
-        if (!isDrawing) { 
-            isDrawing = true; 
-        }
-    };
-
-    this.dream = function(rgb) {
-        if (isTripping) { 
-            isTripping = false;
-        }
-        color = `#${rgb}`;
-    };
-
-    this.look = function() {
-        var data = ctxDrawing.getImageData(x, y, 1, 1).data;
-        $("#look").css("background-color", `rgb(${data[0]}, ${data[1]}, ${data[2]})`);
-    };
-
-    this.trip = function() {
-        isTripping = true;
-    };
-
-    this.draw = function() {
-        move();
-        rotate();
-
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(-rad);
-        if (isImageLoaded) {
-            ctx.drawImage(img, -(width / 2), -(height / 2));
-        }
-        ctx.restore();
-        if (isTripping) {
-            if (distance != 0) {
-                hue++;
+        this.go = function (dist) {
+            if (!isNaN(dist)) {
+                distance = dist;
             }
-            ctxDrawing.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        } else {
-            ctxDrawing.fillStyle = color;
-        }
-        if (isDrawing) { 
-            ctxDrawing.fillRect(x, y, 1, 1); 
-        }
-    };
+        };
 
-    function move() {
-        if (distance != 0) {
-            x -= Math.sin(rad);
-            y -= Math.cos(rad);
-            distance--;
+        this.turn = function (deg) {
+            if (!isNaN(deg)) {
+                degree = deg;
+            }
+        };
+
+        this.tailUp = function () {
+            if (isDrawing) {
+                isDrawing = false;
+            }
+        };
+
+        this.tailDown = function () {
+            if (!isDrawing) {
+                isDrawing = true;
+            }
+        };
+
+        this.dream = function (rgb) {
+            if (isTripping) {
+                isTripping = false;
+            }
+            color = `#${rgb}`;
+        };
+
+        this.look = function () {
+            var data = ctxDrawing.getImageData(x, y, 1, 1).data;
+            $("#look").css("background-color", `rgb(${data[0]}, ${data[1]}, ${data[2]})`);
+        };
+
+        this.trip = function () {
+            isTripping = true;
+        };
+
+        this.draw = function () {
+            move();
+            rotate();
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(-rad);
+            if (isImageLoaded) {
+                ctx.drawImage(img, -(width / 2), -(height / 2));
+            }
+            ctx.restore();
+            if (isTripping) {
+                if (distance != 0) {
+                    hue++;
+                }
+                ctxDrawing.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            }
+            else {
+                ctxDrawing.fillStyle = color;
+            }
+            if (isDrawing) {
+                ctxDrawing.fillRect(x, y, 1, 1);
+            }
+        };
+
+        function move() {
+            if (distance != 0) {
+                x -= Math.sin(rad);
+                y -= Math.cos(rad);
+                distance--;
+            }
         }
-    }
 
-    function rotate() {
-        let degreeStep = degree > 0 ? 1 : -1;
-
-        rad -= degreeStep * (Math.PI / 180);
-        degree -= degreeStep;
+        function rotate() {
+            let degreeStep = degree > 0 ? 1 : -1;
+            rad -= degreeStep * (Math.PI / 180);
+            degree -= degreeStep;
+        }
     }
 }
 
