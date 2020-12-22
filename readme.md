@@ -19,3 +19,5 @@ This was originally made in jQuery for a university course in 2016. I fixed some
 Turtle icon made by [Freepik](http://www.freepik.com) from [www.flaticon.com](http://www.flaticon.com) is used under [Creative Commons BY 3.0 license](http://creativecommons.org/licenses/by/3.0/) (recolored from original).
 
 The rainbow emoji from [Twemoji](https://github.com/twitter/twemoji) is also used in the favicon.
+
+The site uses [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono), run through @sztupy's [Accentizer](http://sztupy.hu/accentizer/index_hu.html).

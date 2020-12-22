@@ -1,4 +1,9 @@
-@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
+@font-face {
+    font-family: 'Share Tech Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/ShareTechMono-Regular-accentized.ttf') format('truetype');
+  }
 
 :root {
     --background: #ffffee;
